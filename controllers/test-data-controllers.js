@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById } = require("../models/test-data-models");
+const { selectTopics, selectArticleById, selectArticles } = require("../models/test-data-models");
 const jsonFile = require("../endpoints.json")
 
 exports.getTopics = (req, res, next) => {
@@ -16,17 +16,26 @@ exports.getInfo = (req, res, next) => {
 };
 
 exports.getByArticleId = (req, res, next) => {
-    const { article_id } = req.params
-    console.log(req.params, "controllers params");
-    selectArticleById(article_id)
+  const { article_id } = req.params
+  selectArticleById(article_id)
     .then((article)=>{
-        res.status(200).json({ article })
-    })
+      res.status(200).json({ article })
+  })
     .catch((err)=>{
-      if (err.msg === "Not Found") {
-        res.status(404).json({ error: "Article Not Found" });
-    } else {
-        next(err);
-    }
-    })
-}
+    if (err.msg === "Not Found") {
+      res.status(404).json({ error: "Article Not Found" });
+  } else {
+      next(err);
+  }
+  })
+};
+
+exports.getArticles = (req, res, next) => {
+  selectArticles()
+  .then((articles) => {
+    res.status(200).send({ articles });
+  })
+  .catch((err) => {
+    next(err);
+  });
+};
