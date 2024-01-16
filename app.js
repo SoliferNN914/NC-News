@@ -1,4 +1,4 @@
-const { getTopics, getInfo, getByArticleId } = require("./controllers/test-data-controllers")
+const { getTopics, getInfo, getByArticleId, getArticles } = require("./controllers/test-data-controllers")
 const {
     handleInternalServerErrors,
     handleSqlErrors,
@@ -10,6 +10,7 @@ const app = express();
 app.get("/api/topics", getTopics)
 app.get("/api", getInfo)
 app.get("/api/articles/:article_id", getByArticleId)
+app.get("/api/articles", getArticles)
 
 app.use(handleCustomErrors);
 app.use(handleSqlErrors);

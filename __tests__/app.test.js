@@ -5,6 +5,7 @@ const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
 const endpointsInfo = require("../endpoints.json")
+const sorted = require('jest-sorted');
 
 beforeEach(() => seed(allTestData));
 afterAll(() => db.end());
@@ -47,7 +48,6 @@ describe("api/articles/:article_id", ()=>{
       .expect(200)
       .then(({ body })=>{
           const {article} = body
-          console.log(article);
           expect(article).toEqual([{
             article_id: 1,
             title: "Living in the shadow of a great man",
@@ -74,8 +74,35 @@ describe("api/articles/:article_id", ()=>{
       .get("/api/articles/999999")
       .expect(404)
       .then(({body}) => {
-        console.log(body);
         expect(body.error).toBe("Article Not Found");
       });
+  });
+})
+
+describe("/api/articles", ()=>{
+  test("200: responds with an array containing article data with comment_count but no body property", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toHaveLength(13);
+      body.articles.forEach((article) => {
+        expect(typeof article.title).toBe("string")
+        expect(typeof article.topic).toBe("string")
+        expect(typeof article.author).toBe("string")
+        expect(typeof article.created_at).toBe("string")
+        expect(typeof article.votes).toBe("number")
+        expect(typeof article.article_img_url).toBe("string")
+        expect(typeof article.comment_count).toBe("string")
+      });
+    });
+  })
+  test("200: responds with array of article objects sorted by created_at date property", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeSortedBy("created_at", { descending: true });
+    });
   });
 })
