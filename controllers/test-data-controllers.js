@@ -16,13 +16,17 @@ exports.getInfo = (req, res, next) => {
 };
 
 exports.getByArticleId = (req, res, next) => {
-    const { article_id } = req.query
-    console.log(req.query);
+    const { article_id } = req.params
+    console.log(req.params, "controllers params");
     selectArticleById(article_id)
     .then((article)=>{
-        res.status(200).send({ article })
+        res.status(200).json({ article })
     })
     .catch((err)=>{
-        next(err)
+      if (err.msg === "Not Found") {
+        res.status(404).json({ error: "Article Not Found" });
+    } else {
+        next(err);
+    }
     })
 }
