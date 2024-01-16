@@ -27,8 +27,9 @@ describe("/api/topics", () => {
       });
   });
 });
+
 describe("/api", () => {
-  test("responds with status 200 and accurate endpoint documentation", () => {
+  test("200: responds with accurate endpoint documentation", () => {
     return request(app)
     .get("/api")
     .expect(200)
@@ -37,3 +38,27 @@ describe("/api", () => {
     })
   });
 });
+
+// describe("api/articles/:article_id", ()=>{
+//     test("200: returns the article with the associated article_id", ()=>{
+//         return request(app)
+//         .get("api/articles/1")
+//         .expect(200)
+//         .then(({response})=>{
+//             const {article} = response
+//             console.log(article);
+//             expect(article).toEqual({
+                
+//                     title: "Living in the shadow of a great man",
+//                     topic: "mitch",
+//                     author: "butter_bridge",
+//                     body: "I find this existence challenging",
+//                     created_at: 1594329060000,
+//                     votes: 100,
+//                     article_img_url:
+//                       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+                  
+//             })
+//         })
+//     })
+// })
