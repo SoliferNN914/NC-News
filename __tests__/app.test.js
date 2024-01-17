@@ -106,3 +106,55 @@ describe("/api/articles", ()=>{
     });
   });
 })
+
+describe("/api/articles/:article_id/comments",() => {
+  test("200: Successful request to an API", () => {
+    return request(app).get("/api/articles/1/comments").expect(200);
+  })
+  test("200: responds with an array of correct length", () => {
+    return request(app)
+    .get("/api/articles/5/comments")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.comments).toHaveLength(2);
+    })
+  })
+  test("200: should respond with array of comment objects and correct properties", ()=>{
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({ body }) => {
+      body.comments.forEach((comment) => {
+        expect(typeof comment.comment_id).toBe("number")
+        expect(typeof comment.body).toBe("string")
+        expect(typeof comment.article_id).toBe("number")
+        expect(typeof comment.author).toBe("string")
+        expect(typeof comment.votes).toBe("number")
+        expect(typeof comment.created_at).toBe("string")
+      })
+    })
+  })
+  test("200: responds with an array of comments with the most recent comments firts", ()=>{
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({ body })=>{
+      expect(body.comments).toBeSortedBy("created_at", { descending: true });
+    })
+  })
+  test("404: responds with an error message when passed in a non existing article_id", ()=>{
+    return request(app)
+    .get("/api/articles/900/comments")
+    .expect(404)
+    .then(({ body })=>{
+      expect(body.msg).toBe("Not Found")})
+  })
+  test("400: responds with Bad Request when given a string as article_id", () => {
+    return request(app)
+      .get("/api/articles/threeandfour/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+})
