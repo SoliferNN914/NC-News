@@ -36,4 +36,12 @@ exports.selectArticles = () => {
   return db.query(query).then(({rows}) => {
     return rows
   })
-}
+};
+
+exports.selectAllComments = async (article_id) => {
+  const { rows } = await db.query (`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`, [article_id]);
+  if (rows.length === 0){
+    throw new Error('Not Found')
+  }
+  return rows;
+};

@@ -1,5 +1,6 @@
-const { selectTopics, selectArticleById, selectArticles } = require("../models/test-data-models");
+const { selectTopics, selectArticleById, selectArticles, selectAllComments } = require("../models/test-data-models");
 const jsonFile = require("../endpoints.json")
+const fs = require("fs/promises");
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -39,3 +40,16 @@ exports.getArticles = (req, res, next) => {
     next(err);
   });
 };
+
+
+exports.getAllComments = async (req, res, next) => {
+  try{
+    const article_id = req.params.article_id
+
+    const comments = await selectAllComments(article_id)
+
+    res.status(200).send({ comments })
+  } catch (err) {
+    next(err)
+  }
+}
