@@ -158,3 +158,57 @@ describe("/api/articles/:article_id/comments",() => {
       });
   });
 })
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("should respond with a 201 status", () => {
+    const testComment = {
+      username: "butter_bridge",
+      body: "oh no",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(201);
+  });
+  test("201: should post the comment and respond with it's properties and values", () => {
+    const testComment = {
+      username: "butter_bridge",
+      body: "oh no",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(201)
+      .send(testComment)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toEqual(
+          expect.objectContaining([{
+            comment_id: 19,
+            body: "oh no",
+            article_id: 1,
+            author: "butter_bridge",
+            votes: 0,
+            created_at: expect.any(String),
+          }]))
+      });
+  });
+  test("400: should respond with a 400 status when given comment with no body", () => {
+    const testComment = {
+      username: "butter_bridge"
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(400);
+  });
+  test("404: should respond with 404 when given a comment with non existing author", () => {
+    const testComment = {
+      username: "noname",
+      body: "oh no",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(404);
+  });
+})

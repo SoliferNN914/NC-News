@@ -1,17 +1,16 @@
-const { getTopics, getInfo, getByArticleId, getArticles, getAllComments } = require("./controllers/test-data-controllers")
-const {
-    handleInternalServerErrors,
-    handleSqlErrors,
-    handleCustomErrors,
-} = require("./errors/index")
+const { getTopics, getInfo, getByArticleId, getArticles, getAllComments, postCommentForArticle } = require("./controllers/test-data-controllers")
+const { handleInternalServerErrors, handleSqlErrors, handleCustomErrors } = require("./errors/index")
 const express = require("express")
 const app = express();
+app.use(express.json());
 
 app.get("/api/topics", getTopics)
 app.get("/api", getInfo)
 app.get("/api/articles/:article_id", getByArticleId)
 app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id/comments", getAllComments)
+
+app.post("/api/articles/:article_id/comments", postCommentForArticle)
 
 app.use((err, req, res, next) => {
     if (err.code === "22P02" || err.code === "23502") {
