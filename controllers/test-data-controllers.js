@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticles, selectAllComments, insertComment } = require("../models/test-data-models");
+const { selectTopics, selectArticleById, selectArticles, selectAllComments, insertComment, updateVote } = require("../models/test-data-models");
 const jsonFile = require("../endpoints.json")
 const fs = require("fs/promises");
 
@@ -63,3 +63,17 @@ exports.postCommentForArticle = (req, res, next) => {
     .catch((err) => {
       next(err)});
 };
+
+exports.partchArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+  updateVote(article_id, inc_votes)
+  .then((article) => {
+    if (!article) {
+      return res.status(404).send({ err: 'Article Not Found' });
+    }
+    res.send({ article });
+  })
+  .catch((err) => {
+    next(err)});
+}
