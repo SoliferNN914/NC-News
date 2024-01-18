@@ -1,4 +1,4 @@
-const { getTopics, getInfo, getByArticleId, getArticles, getAllComments, postCommentForArticle, partchArticle, deleteComment } = require("./controllers/test-data-controllers")
+const { getTopics, getInfo, getByArticleId, getArticles, getAllComments, postCommentForArticle, partchArticle, deleteComment, getUsers } = require("./controllers/test-data-controllers")
 const { handleInternalServerErrors, handleSqlErrors, handleCustomErrors } = require("./errors/index")
 const express = require("express")
 const app = express();
@@ -15,6 +15,8 @@ app.post("/api/articles/:article_id/comments", postCommentForArticle)
 app.patch("/api/articles/:article_id", partchArticle)
 
 app.delete("/api/comments/:comment_id", deleteComment)
+
+app.get("/api/users", getUsers)
 
 app.use((err, req, res, next) => {
     if (err.code === "22P02" || err.code === "23502") {

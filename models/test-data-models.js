@@ -78,3 +78,10 @@ exports.removeComment = (comment_id) => {
     }
   })
 }
+
+exports.selectUsers = () => {
+  const query = "SELECT * FROM users";
+  return db.query(query).then(({ rows }) => {
+    return rows;
+  });
+};

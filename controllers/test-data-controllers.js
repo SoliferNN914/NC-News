@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticles, selectAllComments, insertComment, updateVote, removeComment } = require("../models/test-data-models");
+const { selectTopics, selectArticleById, selectArticles, selectAllComments, insertComment, updateVote, removeComment, selectUsers } = require("../models/test-data-models");
 const jsonFile = require("../endpoints.json")
 const fs = require("fs/promises");
 
@@ -86,4 +86,14 @@ exports.deleteComment = (req, res, next) => {
   })
   .catch((err) => {
     next(err)});
+}
+
+exports.getUsers = (req, res, next) => {
+  selectUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch((err) => {
+      next(err);
+    });
 }
