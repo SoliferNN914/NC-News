@@ -248,3 +248,19 @@ describe("PATCH /api/articles/:article_id", () => {
     })
   });
 })
+
+describe("DELETE /api/comments/:comment_id", ()=>{
+  test("204: should respond with 204 successfuly deleted", () => {
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+  })
+  test("404: should respond with 404 when given a valid but non existent comment_id", ()=>{
+    return request(app)
+    .delete("/api/comments/12345")
+    .expect(404)
+  })
+  test("400: should respond with a 400 status on invalid comment_Id", () => {
+    return request(app).delete("/api/comments/fakeId").expect(400);
+  });
+})
