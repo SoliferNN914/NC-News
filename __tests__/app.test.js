@@ -212,3 +212,39 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(404);
   });
 })
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("200: should respond with a 200 status when object is passed in", () => {
+    const patch = { inc_votes: 1 }
+    return request(app)
+    .patch("/api/articles/1")
+    .send(patch)
+    .expect(200);
+  });
+  test("200: should respond with article votes incremented", () => {
+    const patch = { inc_votes: 1 }
+    return request(app)
+    .patch("/api/articles/1")
+    .send(patch)
+    .expect(200)
+    .then(({ body }) => {
+      const { article } = body;
+      expect(article).toHaveProperty("article_id", 1);
+      expect(article).toHaveProperty("votes", 101);
+    });
+  })
+  test("400: should respond with a 400 when given an incorrect data type value to to patch", () => {
+    const patch = { inc_votes: "abc" };
+    return request(app).patch("/api/articles/1").send(patch).expect(400);
+  });
+  test("404: should respond with a 404 when given a correct value to patch but wrong path was used", () => {
+    const patch = { inc_votes: 1 }
+    return request(app)
+    .patch("/api/articles/96787687")
+    .send(patch)
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.err).toBe("Article Not Found")
+    })
+  });
+})
