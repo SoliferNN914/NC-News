@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticles, selectAllComments } = require("../models/test-data-models");
+const { selectTopics, selectArticleById, selectArticles, selectAllComments, insertComment } = require("../models/test-data-models");
 const jsonFile = require("../endpoints.json")
 const fs = require("fs/promises");
 
@@ -53,3 +53,13 @@ exports.getAllComments = async (req, res, next) => {
     next(err)
   }
 }
+
+exports.postCommentForArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  insertComment(req.body, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err)});
+};
