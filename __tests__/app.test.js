@@ -264,3 +264,26 @@ describe("DELETE /api/comments/:comment_id", ()=>{
     return request(app).delete("/api/comments/fakeId").expect(400);
   });
 })
+
+describe("GET /api/users", () => {
+  test("Responds with an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const {
+          body: { users },
+        } = response;
+        users.forEach((user) => {
+          expect(user).toHaveProperty("username");
+          expect(user).toHaveProperty("name");
+          expect(user).toHaveProperty("avatar_url");
+        });
+      });
+  });
+  test("404: Should respond with 404 when provided an non-existent path", () => {
+    return request(app)
+      .get("/api/userss")
+      .expect(404)
+  });
+});
