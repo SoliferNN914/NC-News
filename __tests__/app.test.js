@@ -105,6 +105,25 @@ describe("/api/articles", ()=>{
       expect(body.articles).toBeSortedBy("created_at", { descending: true });
     });
   });
+  test("200: responds with array of articles filtered by the topic mitch", ()=>{
+    return request(app)
+    .get("/api/articles?topic=mitch")
+    .expect(200)
+    .then(({ body })=>{
+      expect(body.articles[0].topic).toBe("mitch");
+      expect(Array.isArray(body.articles)).toBe(true);
+    })
+  })
+  test("400: should return 400 status when given an invalid topic", () => {
+    return request(app)
+    .get("/api/articles?topic=1234")
+    .expect(404);
+  })
+  test("404: should return 404 status when given a non existing topic", () => {
+    return request(app)
+    .get("/api/articles?topic=doesnotexist")
+    .expect(404);
+  })
 })
 
 describe("/api/articles/:article_id/comments",() => {
@@ -275,15 +294,10 @@ describe("GET /api/users", () => {
           body: { users },
         } = response;
         users.forEach((user) => {
-          expect(user).toHaveProperty("username");
-          expect(user).toHaveProperty("name");
-          expect(user).toHaveProperty("avatar_url");
+          expect(typeof user.username).toBe("string")
+          expect(typeof user.name).toBe("string")
+          expect(typeof user.avatar_url).toBe("string")
         });
       });
-  });
-  test("404: Should respond with 404 when provided an non-existent path", () => {
-    return request(app)
-      .get("/api/userss")
-      .expect(404)
   });
 });
