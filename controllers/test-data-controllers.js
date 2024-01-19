@@ -1,6 +1,8 @@
 const { selectTopics, selectArticleById, selectArticles, selectAllComments, insertComment, updateVote, removeComment, selectUsers } = require("../models/test-data-models");
 const jsonFile = require("../endpoints.json")
 const fs = require("fs/promises");
+const { checkTopicExists } = require("../db/seeds/utils");
+const { log } = require("console");
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -32,8 +34,11 @@ exports.getByArticleId = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
+  const { topic } = req.query
+
+  selectArticles(topic)
   .then((articles) => {
+
     res.status(200).send({ articles });
   })
   .catch((err) => {
