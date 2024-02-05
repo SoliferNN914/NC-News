@@ -2,6 +2,8 @@ const { getTopics, getInfo, getByArticleId, getArticles, getAllComments, postCom
 const { handleInternalServerErrors, handleSqlErrors, handleCustomErrors } = require("./errors/index")
 const express = require("express")
 const app = express();
+const cors = require('cors');
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/topics", getTopics)
