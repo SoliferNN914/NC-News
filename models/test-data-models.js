@@ -25,7 +25,7 @@ exports.selectArticleById = (article_id) => {
   });
 };
 
-exports.selectArticles = (topic) => {
+exports.selectArticles = (topic, sort_by) => {
   let query = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, articles.article_img_url, 
   COUNT(comments.article_id) AS comment_count 
   FROM articles LEFT JOIN comments 
@@ -48,7 +48,7 @@ exports.selectArticles = (topic) => {
     articles.article_id`;
 
   if (sort_by){
-    query += ` ORDER BY created_at DESC`
+    query += ` ORDER BY ${sort_by} DESC`; // Assuming DESC order
   }
   return db.query(query, queryParams).then(({ rows }) => {
     if (!rows.length) {
@@ -58,6 +58,7 @@ exports.selectArticles = (topic) => {
     }
   });
 };
+
 
 exports.selectAllComments = async (article_id) => {
   const { rows } = await db.query (`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`, [article_id]);

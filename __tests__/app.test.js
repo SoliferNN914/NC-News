@@ -81,13 +81,14 @@ describe("api/articles/:article_id", ()=>{
 })
 
 describe("/api/articles", ()=>{
-  test.skip("200: responds with an array containing article data with comment_count but no body property", () => {
+  test("200: responds with an array containing article data with comment_count but no body property", () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
     .then(({ body }) => {
       expect(body.articles).toHaveLength(13);
       body.articles.forEach((article) => {
+        expect(typeof article.article_id).toBe("number")
         expect(typeof article.title).toBe("string")
         expect(typeof article.topic).toBe("string")
         expect(typeof article.author).toBe("string")
@@ -106,7 +107,7 @@ describe("/api/articles", ()=>{
       expect(body.articles).toBeSortedBy("created_at", { descending: true });
     });
   });
-  test.skip("200: responds with array of articles filtered by the topic mitch", ()=>{
+  test("200: responds with array of articles filtered by the topic mitch", ()=>{
     return request(app)
     .get("/api/articles?topic=mitch")
     .expect(200)
