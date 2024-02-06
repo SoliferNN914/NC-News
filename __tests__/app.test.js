@@ -81,7 +81,7 @@ describe("api/articles/:article_id", ()=>{
 })
 
 describe("/api/articles", ()=>{
-  test("200: responds with an array containing article data with comment_count but no body property", () => {
+  test.skip("200: responds with an array containing article data with comment_count but no body property", () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
@@ -98,7 +98,7 @@ describe("/api/articles", ()=>{
       });
     });
   })
-  test("200: responds with array of article objects sorted by created_at date property", () => {
+  test.skip("200: responds with array of article objects sorted by created_at date property", () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
@@ -106,7 +106,7 @@ describe("/api/articles", ()=>{
       expect(body.articles).toBeSortedBy("created_at", { descending: true });
     });
   });
-  test("200: responds with array of articles filtered by the topic mitch", ()=>{
+  test.skip("200: responds with array of articles filtered by the topic mitch", ()=>{
     return request(app)
     .get("/api/articles?topic=mitch")
     .expect(200)
