@@ -34,18 +34,16 @@ exports.getByArticleId = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const { topic } = req.query
+  const { topic, sort_by } = req.query; // Extracting sort_by from query string
 
-  selectArticles(topic)
-  .then((articles) => {
-
-    res.status(200).send({ articles });
-  })
-  .catch((err) => {
-    next(err);
-  });
+  selectArticles(topic, sort_by) // Passing sort_by to selectArticles function
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
-
 
 exports.getAllComments = async (req, res, next) => {
   try{

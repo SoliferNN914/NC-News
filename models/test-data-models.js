@@ -48,7 +48,7 @@ exports.selectArticles = (topic, sort_by) => {
     articles.article_id`;
 
   if (sort_by){
-    query += ` ORDER BY ${sort_by} DESC`; // Assuming DESC order
+    query += ` ORDER BY ${sort_by} DESC`;
   }
   return db.query(query, queryParams).then(({ rows }) => {
     if (!rows.length) {
